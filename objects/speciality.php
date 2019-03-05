@@ -1,13 +1,14 @@
 <?php
-class UserType{
+class Speciality{
     //connections to the database
     private $conn;
     private $tableName;
 
     //Table attirbutes
-    public $type_id;
-    public $Entitlement;
-  
+    public $speciality_ID;
+    public $Spec_Name;
+    public $description;
+
     public function __construct($db){
         $this->connection = $db;
     }
