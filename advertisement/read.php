@@ -5,7 +5,7 @@
     include_once '../config/database.php';
     include_once '../object/advertisement.php';
 
-    $database = new database();
+    $database = new Database();
     $db = $database->getConnection();
 
     //init object
