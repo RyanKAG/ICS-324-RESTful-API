@@ -20,11 +20,11 @@
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             extract($row);
             $advertisement_flyer = array(
-            "id"=>$AD_id,
+            "id"=>$AD_ID,
             "startDate"=>$start_date,
             "endDate"=> $end_date,
             "content"=> $content,
-            "sysAdmin_id"=> $sysAdmin_id
+            "sysAdmin_id"=> $sysAdmin_ID
             );
 
             array_push($advertisement_arr["records"], $advertisement_flyer);
