@@ -12,7 +12,7 @@ class Advertisment{
     public $sysAdmin_id;
 
     public function __construct($db){
-        $this->connection = $db;
+        $this->conn = $db;
     }
 
     public function read(){
