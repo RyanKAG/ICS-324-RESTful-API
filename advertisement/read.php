@@ -15,7 +15,7 @@
     $num = $stmt->rowCount();
 
     if($num>0){
-        $advertisement_arr = arra();
+        $advertisement_arr = array();
         $advertisement_arr["records"]=array();
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             extract($row);

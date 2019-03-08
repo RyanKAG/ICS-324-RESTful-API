@@ -1,5 +1,5 @@
 <?php
-class Advertisment{
+class Advertisement{
     //connections to the database
     private $conn;
     private $tableName = 'advertisement';
@@ -16,7 +16,7 @@ class Advertisment{
     }
 
     public function read(){
-        $query = 'SELECT * FROM ' .$this->tableName . ' ';
+        $query = 'SELECT * FROM advertisement ';
         
         $stmt = $this->conn->prepare($query);
 
