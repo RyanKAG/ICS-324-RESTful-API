@@ -30,13 +30,14 @@
     ){
         $user->FName = $data->FName;
         $user->LName = $data->LName;
-        $user->Email = $data->Email;
+        $user->U_ID = $data->U_ID;
         $user->Hashed_pw = $data->Hashed_pw;
         $user->UserName = $data->UserName;
+        $user->Email = $data->Email;
         $user->Reg_Date = date('d-m-Y H:i:s');
         $user->type_IDs = $data->type_IDs;
-        $user->U_ID = $data->U_ID;
         $user->status_ID = $data->status_ID;
+        
         if($user->create()){
             http_response_code(201);
 

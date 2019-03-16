@@ -23,6 +23,7 @@ class User{
                         LName=:LName, 
                         U_ID=:U_ID, 
                         Hashed_pw=:Hashed_pw,
+                        UserName =:UserName,
                         Email=:Email,
                         Reg_Date=:Reg_Date,
                         type_IDs=:type_IDs,
@@ -30,21 +31,21 @@ class User{
         $stmt = $this->conn->prepare($query);
 
         //Sanitizing
-        $this->$U_ID = htmlspecialchars(strip_tags($this->U_ID));
         $this->$FName = htmlspecialchars(strip_tags($this->FName));
         $this->$LName = htmlspecialchars(strip_tags($this->LName));
-        $this->$UserName = htmlspecialchars(strip_tags($this->UserName));
+        $this->$U_ID = htmlspecialchars(strip_tags($this->U_ID));
         $this->$Hashed_pw = htmlspecialchars(strip_tags($this->Hashed_pw));
+        $this->$UserName = htmlspecialchars(strip_tags($this->UserName));
         $this->$Email = htmlspecialchars(strip_tags($this->Email));
         $this->$Reg_Date = htmlspecialchars(strip_tags($this->Reg_Date));
         $this->$type_IDs = htmlspecialchars(strip_tags($this->type_IDs));
         $this->$status_ID = htmlspecialchars(strip_tags($this->status_ID));
         
-        $stmt->bindParam(":U_ID",$this->U_ID);
         $stmt->bindParam(":FName",$this->FName);
         $stmt->bindParam(":LName",$this->LName);
-        $stmt->bindParam(":UserName",$this->UserName);
+        $stmt->bindParam(":U_ID",$this->U_ID);
         $stmt->bindParam(":Hashed_pw",$this->Hashed_pw);
+        $stmt->bindParam(":UserName",$this->UserName);
         $stmt->bindParam(":Email",$this->Email);
         $stmt->bindParam(":Reg_Date",$this->Reg_Date);
         $stmt->bindParam(":type_IDs",$this->type_IDs);
