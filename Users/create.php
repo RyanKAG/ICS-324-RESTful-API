@@ -1,16 +1,17 @@
 <?php
-    header("Access-Control-Allow: *");
-    header('Content-Type: application/json; charset=UTF-8');
-    header('Access-Control-Allow-Methods: POST');
-    header('Access-Control-Max-Age: 3600');
-    header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow, Autherization, X-Requested-With');
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+ 
 
     include_once ('../object/user.php');
-    include_once ('../object/Database.php');
+    include_once ('../config/database.php');
 
 
-    $database = new Databse();
-    $db = $databse->getConnection();
+    $database = new Database();
+    $db = $database->getConnection();
 
     $user = new User($db);
 
@@ -25,19 +26,18 @@
         !empty($data->Hashed_pw)&&
         !empty($data->UserName) &&
         !empty($data->status_ID) &&
-        !empty($data->U_ID) &&
-        !empty($data->type_IDs)
+        !empty($data->Reg_Date)&&
+        !empty($data->Type_ID)
     ){
         $user->FName = $data->FName;
         $user->LName = $data->LName;
-        $user->U_ID = $data->U_ID;
         $user->Hashed_pw = $data->Hashed_pw;
         $user->UserName = $data->UserName;
         $user->Email = $data->Email;
-        $user->Reg_Date = date('d-m-Y H:i:s');
-        $user->type_IDs = $data->type_IDs;
+        $user->Reg_Date = $data->Reg_Date;
+        $user->type_ID = $data->Type_ID;
         $user->status_ID = $data->status_ID;
-        
+   
         if($user->create()){
             http_response_code(201);
 
