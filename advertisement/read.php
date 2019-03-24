@@ -13,8 +13,6 @@
     
     $stmt = $advertisement->read();
     $num = $stmt->rowCount();
-    $hash = password_hash($password, PASSWORD_BCRYPT);
-    echo $hash;
     if($num>0){
         $advertisement_arr = array();
         $advertisement_arr["records"]=array();

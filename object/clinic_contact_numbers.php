@@ -1,5 +1,5 @@
 <?php
-class Clini{
+class Clinic{
     private $con;
     private $tbaleName;
 
