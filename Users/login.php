@@ -6,10 +6,10 @@
  */
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: access");
-header("Access-Control-Allow-Methods: GET");
-header("Access-Control-Allow-Credentials: true");
-header('Content-Type: application/json');
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 include_once('../config/database.php');
 include_once('../object/user.php');
@@ -21,17 +21,15 @@ $db = $database->getConnection();
 $user = new User($db);
 
 $data = json_decode(file_get_contents('php://input'));
-echo "1";
 
 if (
-    !epmty($data->UserName) ||
-    !epmty($data->Email) &&
-    !epmty($data->password)
+    !empty($data->UserName) ||
+    !empty($data->Email) &&
+    !empty($data->password)
 ) {
-    echo "1";
     $user->UserName = $data->UserName;
     $user->Email = $data->Email;
-    echo "1";
+
     if ($user->isUser()) {
         if ($user->login($data->password)) {
             http_response_code(303);
@@ -44,4 +42,6 @@ if (
         http_response_code(401);
         echo json_encode(array("message" => "could not find the user"));
     }
+}else{
+    echo json_encode(array('message'=> 'empty input'));
 }

@@ -19,9 +19,12 @@ class User
 
     public function isUser()
     {
-        $query = 'SELECT * FROM USERS WHERE UserName= ' . $this->UserName . ' ';
-
+//        $query = 'SELECT * FROM USERS WHERE ' . !empty($this->UserName) ? "UserName=:UserName" : "Email=:Email";
+        $query = 'SELECT * FROM USERS WHERE UserName=jakeFasil';
         $stmt = $this->conn->prepare($query);
+
+        $this->sanitize();
+
 
         $stmt->execute();
         return $stmt->rowCount() > 0 ? True : False;
@@ -41,14 +44,7 @@ class User
         $stmt = $this->conn->prepare($query);
 
         //Sanitizing
-        $this->FName = htmlspecialchars(strip_tags($this->FName));
-        $this->LName = htmlspecialchars(strip_tags($this->LName));
-        $this->Hashed_pw = htmlspecialchars(strip_tags($this->Hashed_pw));
-        $this->UserName = htmlspecialchars(strip_tags($this->UserName));
-        $this->Email = htmlspecialchars(strip_tags($this->Email));
-        $this->Reg_Date = htmlspecialchars(strip_tags($this->Reg_Date));
-        $this->type_ID = htmlspecialchars(strip_tags($this->type_ID));
-        $this->status_ID = htmlspecialchars(strip_tags($this->status_ID));
+        $this->sanitize();
 
 
         $stmt->bindParam(":FName", $this->FName);
@@ -68,9 +64,16 @@ class User
 
     public function login($password)
     {
-        $query = 'SELECT Hashed_pw FROM USERS WHERE UserName = '. $this->UserName .'';
+        $query = 'SELECT Hashed_pw FROM USERS WHERE UserName=? OR Email=?';
 
         $stmt = $this->conn->prepare($query);
+
+        //Sanitize
+        $this->sanitize();
+
+        $stmt->bindParam(":UserName", $this->UserName);
+        $stmt->bindParam(":Email", $this->Email);
+
         $stmt->execute();
 
         $row = $stmt->fetch(PDO::FETCH_OBJ);
@@ -80,7 +83,16 @@ class User
         return password_verify($password, $this->Hashed_pw) ? True : False;
 
     }
-
+    private function sanitize(){
+        $this->FName = htmlspecialchars(strip_tags($this->FName));
+        $this->LName = htmlspecialchars(strip_tags($this->LName));
+        $this->Hashed_pw = htmlspecialchars(strip_tags($this->Hashed_pw));
+        $this->UserName = htmlspecialchars(strip_tags($this->UserName));
+        $this->Email = htmlspecialchars(strip_tags($this->Email));
+        $this->Reg_Date = htmlspecialchars(strip_tags($this->Reg_Date));
+        $this->type_ID = htmlspecialchars(strip_tags($this->type_ID));
+        $this->status_ID = htmlspecialchars(strip_tags($this->status_ID));
+    }
 }
 
 ?>
