@@ -33,15 +33,30 @@ if (
     if ($user->isUser()) {
         if ($user->login($data->password)) {
             http_response_code(303);
+
             echo json_encode(array('message' => 'Login was successful'));
+
+            $db = null;
+            $user->nullifyConnection();
         } else {
             http_response_code(422);
+
             echo json_encode(array('message' => 'invalid password'));
+
+            $db = null;
+            $user->nullifyConnection();
         }
     } else {
         http_response_code(401);
+
         echo json_encode(array("message" => "could not find the user"));
+
+        $db = null;
+        $user->nullifyConnection();
     }
 }else{
     echo json_encode(array('message'=> 'empty input'));
+
+    $user->nullifyConnection();
+    $db = null;
 }

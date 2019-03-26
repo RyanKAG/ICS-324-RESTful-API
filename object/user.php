@@ -10,6 +10,7 @@ class User
     public $Reg_Date;
     public $type_ID;
     public $status_ID;
+
     private $conn;
 
     public function __construct($db)
@@ -26,7 +27,7 @@ class User
         $this->sanitize();
 
 
-        $stmt->execute([$this->UserName ,$this->Email]);
+        $stmt->execute([$this->UserName, $this->Email]);
 
         return $stmt->rowCount() > 0 ? True : False;
     }
@@ -67,6 +68,8 @@ class User
     {
         $query = 'SELECT * FROM USERS WHERE UserName=? OR Email=?';
 
+        $isLoggedIn = 1;
+
         $stmt = $this->conn->prepare($query);
 
         //Sanitize
@@ -76,21 +79,39 @@ class User
 
         $row = $stmt->fetch(PDO::FETCH_OBJ);
 
-        if(password_verify($password, $row->Hashed_pw)){
+        if (password_verify($password, $row->Hashed_pw)) {
             echo json_encode(array([
                 "UserName:" => $row->UserName,
                 "FName" => $row->FName,
-                "LName"=> $row->LName,
-                "Email"=>$row->Email,
-                "Reg_Date"=>$row->Reg_Date,
-                "Type_ID"=> $row->Type_ID]));
+                "LName" => $row->LName,
+                "Email" => $row->Email,
+                "Reg_Date" => $row->Reg_Date,
+                "Type_ID" => $row->Type_ID]));
+            $query = 'UPDATE USERS SET isLoggedIn = ? WHERE UserName = ? OR Email = ?';
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute([$isLoggedIn, $this->UserName, $this->Email]);
             return true;
         }
 
         return false;
 
     }
-    private function sanitize(){
+
+    public function logout()
+    {
+        $query = 'UPDATE USERS SET isLoggedIN = ? WHERE UserName = ? OR Email = ?';
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->sanitize();
+
+        return $stmt->execute([0, $this->UserName, $this->Email]) ? true : false;
+    }
+
+    private function sanitize()
+    {
         $this->FName = htmlspecialchars(strip_tags($this->FName));
         $this->LName = htmlspecialchars(strip_tags($this->LName));
         $this->Hashed_pw = htmlspecialchars(strip_tags($this->Hashed_pw));
@@ -100,6 +121,8 @@ class User
         $this->type_ID = htmlspecialchars(strip_tags($this->type_ID));
         $this->status_ID = htmlspecialchars(strip_tags($this->status_ID));
     }
-}
 
-?>
+    public function nullifyConnection(){
+        $this->conn = null;
+    }
+}

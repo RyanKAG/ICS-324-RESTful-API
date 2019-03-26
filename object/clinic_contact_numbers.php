@@ -1,6 +1,6 @@
 <?php
-class Clinic{
-    private $con;
+class ClinicContactNumbers{
+    private $conn;
     private $tbaleName;
 
     public $cNumber;
@@ -9,7 +9,7 @@ class Clinic{
     public $CCNOrder;
 
     public function __construct($db){
-        $this->con= $db;
+        $this->conn= $db;
     }
 
 }

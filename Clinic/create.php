@@ -10,59 +10,48 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once '../config/database.php';
  
 // instantiate product object
-include_once '../objects/product.php';
+include_once '../object/clinic.php';
  
 $database = new Database();
 $db = $database->getConnection();
  
-$product = new Product($db);
+$clinic = new Clinic($db);
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
- 
-// make sure data is not empty
-if(
-    !empty($data->name) &&
-    !empty($data->price) &&
-    !empty($data->description) &&
-    !empty($data->category_id)
-){
- 
-    // set product property values
-    $product->name = $data->name;
-    $product->price = $data->price;
-    $product->description = $data->description;
-    $product->category_id = $data->category_id;
-    $product->created = date('Y-m-d H:i:s');
- 
-    // create the product
-    if($product->create()){
- 
-        // set response code - 201 created
+
+if( !empty($this->c_id) &&
+    !empty($this->profile) &&
+    !empty($this->services) &&
+    !empty($this->location) &&
+    !empty($this->website) &&
+    !empty($this->email) &&
+    !empty($this->rating) &&
+    !empty($this->clinicManId) &&
+    !empty($this->statusId)){
+
+    $clinic->c_id = $data->c_id;
+    $clinic->profile = $data->profile;
+    $clinic->services = $data->services;
+    $clinic->location = $data->location;
+    $clinic->website = $data->email;
+    $clinic->email = $data->rating;
+    $clinic->rating = $data->rating;
+    $clinic->clinicManId = $data->clinicManId;
+    $clinic->statusId = $data->statusId;
+
+    if ($clinic->create()) {
         http_response_code(201);
- 
-        // tell the user
-        echo json_encode(array("message" => "Product was created."));
+
+        echo json_encode("");
+    } else {
+        http_response_code(204);
+
+        echo json_encode(array('Error' => 'invalid json'));
     }
- 
-    // if unable to create the product, tell the user
-    else{
- 
-        // set response code - 503 service unavailable
-        http_response_code(503);
- 
-        // tell the user
-        echo json_encode(array("message" => "Unable to create product."));
-    }
-}
- 
-// tell the user data is incomplete
-else{
- 
-    // set response code - 400 bad request
+
+}else{
     http_response_code(400);
- 
-    // tell the user
-    echo json_encode(array("message" => "Unable to create product. Data is incomplete."));
+
+    echo json_encode(array('Error'=> 'one of the fields in the json is empty'));
 }
-?>
