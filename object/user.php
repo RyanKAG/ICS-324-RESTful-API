@@ -20,13 +20,14 @@ class User
     public function isUser()
     {
 //        $query = 'SELECT * FROM USERS WHERE ' . !empty($this->UserName) ? "UserName=:UserName" : "Email=:Email";
-        $query = 'SELECT * FROM USERS WHERE UserName=jakeFasil';
+        $query = 'SELECT * FROM USERS WHERE UserName=? OR Email=?';
         $stmt = $this->conn->prepare($query);
 
         $this->sanitize();
 
 
-        $stmt->execute();
+        $stmt->execute([$this->UserName ,$this->Email]);
+
         return $stmt->rowCount() > 0 ? True : False;
     }
 
@@ -64,23 +65,29 @@ class User
 
     public function login($password)
     {
-        $query = 'SELECT Hashed_pw FROM USERS WHERE UserName=? OR Email=?';
+        $query = 'SELECT * FROM USERS WHERE UserName=? OR Email=?';
 
         $stmt = $this->conn->prepare($query);
 
         //Sanitize
         $this->sanitize();
 
-        $stmt->bindParam(":UserName", $this->UserName);
-        $stmt->bindParam(":Email", $this->Email);
-
-        $stmt->execute();
+        $stmt->execute([$this->UserName, $this->Email]);
 
         $row = $stmt->fetch(PDO::FETCH_OBJ);
 
-        echo $row;
+        if(password_verify($password, $row->Hashed_pw)){
+            echo json_encode(array([
+                "UserName:" => $row->UserName,
+                "FName" => $row->FName,
+                "LName"=> $row->LName,
+                "Email"=>$row->Email,
+                "Reg_Date"=>$row->Reg_Date,
+                "Type_ID"=> $row->Type_ID]));
+            return true;
+        }
 
-        return password_verify($password, $this->Hashed_pw) ? True : False;
+        return false;
 
     }
     private function sanitize(){

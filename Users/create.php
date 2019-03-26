@@ -38,10 +38,16 @@ if (
     $user->type_ID = $data->Type_ID;
     $user->status_ID = $data->status_ID;
 
-    if ($user->create() && !$user->isUser()) {
+    if (!$user->isUser()) {
+        if($user->create()){
         http_response_code(201);
 
         echo json_encode(array("message" => 'User has been registered'));
+        }else {
+            http_response_code(502);
+
+            echo json_encode(array('Error' => 'in sql execution'));
+        }
     } else {
         http_response_code(409);
 

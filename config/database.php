@@ -1,7 +1,7 @@
 <?php
 Class Database
 {
-    private $host = 'localhost:3307';
+    private $host = 'localhost:8889';
     private $user = 'root';
     private $pass = 'root';
     private $dbName = 'PASM';
