@@ -11,26 +11,24 @@ include_once '../config/database.php';
  
 // instantiate product object
 include_once '../object/clinic.php';
- 
 $database = new Database();
 $db = $database->getConnection();
- 
+
 $clinic = new Clinic($db);
- 
+
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
 
-if( !empty($this->c_id) &&
-    !empty($this->profile) &&
-    !empty($this->services) &&
-    !empty($this->location) &&
-    !empty($this->website) &&
-    !empty($this->email) &&
-    !empty($this->rating) &&
-    !empty($this->clinicManId) &&
-    !empty($this->statusId)){
+if (
+    !empty($data->profile) &&
+    !empty($data->services) &&
+    !empty($data->location) &&
+    !empty($data->website) &&
+    !empty($data->email) &&
+    !empty($data->rating) &&
+    !empty($data->clinicManId) &&
+    !empty($data->statusId)) {
 
-    $clinic->c_id = $data->c_id;
     $clinic->profile = $data->profile;
     $clinic->services = $data->services;
     $clinic->location = $data->location;
@@ -55,3 +53,4 @@ if( !empty($this->c_id) &&
 
     echo json_encode(array('Error'=> 'one of the fields in the json is empty'));
 }
+

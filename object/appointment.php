@@ -1,7 +1,6 @@
 <?php
 class Appointment{
     private $conn;
-    private $tableName;
 
     public $apm_id;
     public $apm_date;

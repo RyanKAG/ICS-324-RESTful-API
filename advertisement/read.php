@@ -15,7 +15,6 @@
     $num = $stmt->rowCount();
     if($num>0){
         $advertisement_arr = array();
-        $advertisement_arr["records"]=array();
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             extract($row);
             $advertisement_flyer = array(
@@ -26,7 +25,7 @@
             "sysAdmin_id"=> $sysAdmin_ID
             );
 
-            array_push($advertisement_arr["records"], $advertisement_flyer);
+            array_push($advertisement_arr, $advertisement_flyer);
         }
 
         http_response_code(200);

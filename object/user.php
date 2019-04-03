@@ -2,6 +2,7 @@
 
 class User
 {
+    public $u_id;
     public $FName;
     public $LName;
     public $UserName;
@@ -80,13 +81,15 @@ class User
         $row = $stmt->fetch(PDO::FETCH_OBJ);
 
         if (password_verify($password, $row->Hashed_pw)) {
-            echo json_encode(array([
-                "UserName:" => $row->UserName,
-                "FName" => $row->FName,
-                "LName" => $row->LName,
-                "Email" => $row->Email,
-                "Reg_Date" => $row->Reg_Date,
-                "Type_ID" => $row->Type_ID]));
+            echo json_encode(array(
+                "id" => (int)$row->U_ID,
+                "username:" => $row->UserName,
+                "fname" => $row->FName,
+                "lanme" => $row->LName,
+                "email" => $row->Email,
+                "regDate" => $row->Reg_Date,
+                "typeId" => (int)$row->Type_ID,
+                'statusId' => (int)$row->status_ID));
             $query = 'UPDATE USERS SET isLoggedIn = ? WHERE UserName = ? OR Email = ?';
 
             $stmt = $this->conn->prepare($query);

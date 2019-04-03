@@ -32,10 +32,7 @@ if (
 
     if ($user->isUser()) {
         if ($user->login($data->password)) {
-            http_response_code(303);
-
-            echo json_encode(array('message' => 'Login was successful'));
-
+            http_response_code(200);
             $db = null;
             $user->nullifyConnection();
         } else {
@@ -55,7 +52,7 @@ if (
         $user->nullifyConnection();
     }
 }else{
-    echo json_encode(array('message'=> 'empty input'));
+    http_response_code(204);
 
     $user->nullifyConnection();
     $db = null;

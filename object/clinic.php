@@ -18,8 +18,7 @@ class Clinic{
 
     public function create(){
         $query= 'INSERT INTO clinic 
-                    SET c_id = ?,
-                    profile = ?,
+                    SET profile = ?,
                     services = ?,
                     location = ?,
                     website = ?,
@@ -27,13 +26,12 @@ class Clinic{
                     rating = ?,
                     clinic_ManID = ?,
                     status_ID = ?';
-
+        echo 2;
         $stmt = $this->conn->prepare($query);
 
         $this->sanitize();
 
         if($stmt->execute([
-            $this->c_id,
             $this->profile,
             $this->services,
             $this->location,
@@ -50,7 +48,6 @@ class Clinic{
 
     public function isUser()
     {
-//        $query = 'SELECT * FROM USERS WHERE ' . !empty($this->UserName) ? "UserName=:UserName" : "Email=:Email";
         $query = 'SELECT * FROM clinic WHERE profile=? OR Email=?';
         $stmt = $this->conn->prepare($query);
 
