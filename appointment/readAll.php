@@ -15,24 +15,28 @@ $db = $database->getConnection();
 //init object
 $appointment = new Appointment($db);
 
-$stmt = $advertisement->read();
+$appointment->patient_id = $_GET['id'];
+
+$stmt = $appointment->read();
 $num = $stmt->rowCount();
+if($appointment->patient_id!=null)
 if ($num > 0) {
-    $advertisement_arr = array();
+    $appointmentList = array();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
-        $advertisement_flyer = array(
-            "id" => $Apm_ID,
-            "date" => $Apm_Date,
-            "type" => $Apm_Type,
-            "content" => $pa,
-            "sysAdmin_id" => $sysAdmin_ID
+        $apm = array(
+            "id" => $apm_id,
+            "date" => $apm_date,
+            "type" => $apm_type,
+            "dentist" => $fname . $lname,
+            "status" => $status_name
         );
-        array_push($advertisement_arr, $advertisement_flyer);
+        array_push($appointmentList, $apm);
     }
     http_response_code(200);
-    echo json_encode($advertisement_arr);
+    echo json_encode($appointmentList);
 } else {
     http_response_code(404);
     echo json_encode(array("message" => "No advertisements"));
-}
+}else
+    http_response_code(204);

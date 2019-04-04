@@ -9,7 +9,7 @@ class UserType{
     public $Entitlement;
   
     public function __construct($db){
-        $this->connection = $db;
+        $this->conn0 = $db;
     }
 }
 ?>
