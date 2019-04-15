@@ -13,16 +13,17 @@ class Appointment{
     public function __construct($db){
         $this->conn = $db;
     }
-
     public function read()
     {
-        $query= 'SELECT a.apm_id, a.apm_date, a.apm_type, d.fname, d.lname, s.status_name
+        $query= 'SELECT a.apm_id, a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
                     FROM appointment a
                     LEFT JOIN Dentist d ON
                       a.Dentist_ID = d.D_ID
+                    LEFT JOIN specialty sp ON
+                         sp.Specialty_ID = d.Specialty_ID
                     LEFT JOIN user_status s ON
-                    s.Status_ID = a.Apm_ID
-                    WHERE a.Patient_ID = ?';
+                    s.Status_ID = a.status_ID
+                    WHERE a.Patient_ID = ? ORDER BY a.date_time ASC';
 
         $stmt = $this->conn->prepare($query);
 
@@ -32,15 +33,56 @@ class Appointment{
         return $stmt;
     }
 
-    public function create()
+    public function readStatus()
     {
-        $query = 'INSERT INTO APPOINTMENT SET 
-                    apm_date=?, apm_type=?, patient_id=?, dentist_id=?, status_id=?';
+        $query= 'SELECT a.apm_id, a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
+                    FROM appointment a
+                    LEFT JOIN Dentist d ON
+                      a.Dentist_ID = d.D_ID
+                    LEFT JOIN specialty sp ON
+                         sp.Specialty_ID = d.Specialty_ID
+                    LEFT JOIN user_status s ON
+                    s.Status_ID = a.status_ID
+                    WHERE a.Patient_ID = ? AND a.status_id = ? ORDER BY a.date_time ASC';
 
         $stmt = $this->conn->prepare($query);
 
+        $this->sanitise();
+
+        $stmt->execute([$this->patient_id, $this->status_id]);
+        return $stmt;
+    }
+
+    public function readOneStatus()
+    {
+        $query= 'SELECT a.apm_id, a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
+                    FROM appointment a
+                    LEFT JOIN Dentist d ON
+                      a.Dentist_ID = d.D_ID
+                    LEFT JOIN specialty sp ON
+                         sp.Specialty_ID = d.Specialty_ID
+                    LEFT JOIN user_status s ON
+                    s.Status_ID = a.status_ID
+                    WHERE a.status_id = ? ORDER BY a.date_time ASC';
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->sanitise();
+
+        $stmt->execute([$this->status_id]);
+        return $stmt;
+    }
+
+    public function create()
+    {
+        $query = 'INSERT INTO APPOINTMENT SET 
+                    date_time=?, apm_type=?, Patient_ID=?, dentist_id=?, status_id=4';
+
+        $stmt = $this->conn->prepare($query);
+
+
         if($stmt->execute([$this->apm_date, $this->apm_type,
-                        $this->patient_id,$this->dentist_id, $this->status_id]))
+                        $this->patient_id, $this->dentist_id]))
             return true;
         return false;
     }
@@ -51,5 +93,20 @@ class Appointment{
         $this->apm_date = htmlspecialchars(strip_tags($this->apm_date));
         $this->patient_id = htmlspecialchars(strip_tags($this->patient_id));
         $this->dentist_id = htmlspecialchars(strip_tags($this->dentist_id));
+    }
+
+    public function delete()
+    {
+        $query = 'DELETE FROM appointment Where apm_id = ?';
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->sanitise();
+
+        if($stmt->execute([$this->apm_id]))
+            return true;
+
+        return false;
+
     }
 }

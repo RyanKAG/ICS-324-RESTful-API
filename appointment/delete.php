@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: Ryan
- * Date: 4/4/2019
- * Time: 1:06 AM
+ * Date: 4/13/2019
+ * Time: 9:31 PM
  */
 
 header("Access-Control-Allow-Origin: *");
@@ -20,22 +20,12 @@ $db = $database->getConnection();
 
 $appointment = new Appointment($db);
 
-$data = json_decode(file_get_contents('php://input'));
+$appointment->apm_id = $_GET['id'];
 
-if (
-    !empty($data->date_time) &&
-    !empty($data->type) &&
-    !empty($data->patientId) &&
-    !empty($data->dentistId)
-) {
-    $appointment->apm_date =date('Y-m-d H:i:s', strtotime($data->date_time));
-    $appointment->apm_type =$data->type;
-    $appointment->patient_id =$data->patientId;
-    $appointment->dentist_id = $data->dentistId;
-
-    if($appointment->create())
-        http_response_code(201);
-    else
-        http_response_code(409);
-}else
+if($appointment->apm_id != null)
+if($appointment->delete())
+    http_response_code(200);
+else
+    http_response_code(404);
+else
     http_response_code(204);

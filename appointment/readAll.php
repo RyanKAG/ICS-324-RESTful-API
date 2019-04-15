@@ -10,6 +10,7 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 include_once '../config/database.php';
 include_once '../object/appointment.php';
+
 $database = new Database();
 $db = $database->getConnection();
 //init object
@@ -25,11 +26,12 @@ if ($num > 0) {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
         $apm = array(
-            "id" => $apm_id,
-            "date" => $apm_date,
+            "id" => (int)$apm_id,
+            "date" => $date_time,
             "type" => $apm_type,
-            "dentist" => $fname . $lname,
-            "status" => $status_name
+            "dentist" => $fname ." ". $lname,
+            "status" => $status_name,
+            'specialty'=> $spec_name
         );
         array_push($appointmentList, $apm);
     }
@@ -37,6 +39,6 @@ if ($num > 0) {
     echo json_encode($appointmentList);
 } else {
     http_response_code(404);
-    echo json_encode(array("message" => "No advertisements"));
+    echo json_encode(array("message" => "No appointments"));
 }else
     http_response_code(204);

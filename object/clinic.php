@@ -46,15 +46,28 @@ class Clinic{
         return false;
     }
 
-    public function isUser()
+    public function readAll(){
+        $query= 'SELECT c.c_id, c.services,  c.email, c.website, c.rating, c.name, s.status_name 
+                FROM Clinic c 
+                LEFT JOIN user_status s
+                    ON s.status_id = c.status_id
+                ORDER BY c.rating DESC';
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    public function isClinic()
     {
-        $query = 'SELECT * FROM clinic WHERE profile=? OR Email=?';
+        $query = 'SELECT * FROM clinic WHERE c_id=?';
         $stmt = $this->conn->prepare($query);
 
         $this->sanitize();
 
 
-        $stmt->execute([$this->UserName, $this->Email]);
+        $stmt->execute([$this->c_id]);
 
         return $stmt->rowCount() > 0 ? True : False;
     }
@@ -70,6 +83,11 @@ class Clinic{
         $this->clinicManId = htmlspecialchars(strip_tags($this->clinicManId));
         $this->location = htmlspecialchars(strip_tags($this->location));
         $this->rating = htmlspecialchars(strip_tags($this->rating));
+    }
+
+    public function updateStatus()
+    {
+        
     }
 }
 

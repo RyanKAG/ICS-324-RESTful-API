@@ -1,6 +1,6 @@
 <?php
 class Dentist{
-    private $con;
+    private $conn;
     private $tbaleName;
 
     public $d_id;
@@ -17,7 +17,21 @@ class Dentist{
     public $status_id;
 
     public function __construct($db){
-        $this->con= $db;
+        $this->conn = $db;
+    }
+
+
+    public function getDentistsIn()
+    {
+        $query = 'SELECT d.d_id, d.fname, d.lname, d.email, d.clinic_office, s.status_name
+                    FROM dentist d
+                    LEFT JOIN user_status s ON s.status_id = d.status_id 
+                    WHERE clinic_id = ?';
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->execute([$this->clinic_id]);
+        return $stmt;
     }
 
 }
