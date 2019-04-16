@@ -1,5 +1,7 @@
 <?php
-class Appointment{
+
+class Appointment
+{
     private $conn;
 
     public $apm_id;
@@ -10,14 +12,16 @@ class Appointment{
     public $dentist_id;
     public $status_id;
 
-    public function __construct($db){
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
+
     public function read()
     {
-        $query= 'SELECT a.apm_id, a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
+        $query = 'SELECT a.apm_id, a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
                     FROM appointment a
-                    LEFT JOIN Dentist d ON
+                    LEFT JOIN dentist d ON
                       a.Dentist_ID = d.D_ID
                     LEFT JOIN specialty sp ON
                          sp.Specialty_ID = d.Specialty_ID
@@ -35,9 +39,9 @@ class Appointment{
 
     public function readStatus()
     {
-        $query= 'SELECT a.apm_id, a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
+        $query = 'SELECT a.apm_id, a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
                     FROM appointment a
-                    LEFT JOIN Dentist d ON
+                    LEFT JOIN dentist d ON
                       a.Dentist_ID = d.D_ID
                     LEFT JOIN specialty sp ON
                          sp.Specialty_ID = d.Specialty_ID
@@ -55,9 +59,9 @@ class Appointment{
 
     public function readOneStatus()
     {
-        $query= 'SELECT a.apm_id, a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
+        $query = 'SELECT a.apm_id, a.dentist_id ,a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
                     FROM appointment a
-                    LEFT JOIN Dentist d ON
+                    LEFT JOIN dentist d ON
                       a.Dentist_ID = d.D_ID
                     LEFT JOIN specialty sp ON
                          sp.Specialty_ID = d.Specialty_ID
@@ -81,13 +85,14 @@ class Appointment{
         $stmt = $this->conn->prepare($query);
 
 
-        if($stmt->execute([$this->apm_date, $this->apm_type,
-                        $this->patient_id, $this->dentist_id]))
+        if ($stmt->execute([$this->apm_date, $this->apm_type,
+            $this->patient_id, $this->dentist_id]))
             return true;
         return false;
     }
 
-    private function sanitise(){
+    private function sanitise()
+    {
         $this->status_id = htmlspecialchars(strip_tags($this->status_id));
         $this->apm_type = htmlspecialchars(strip_tags($this->apm_type));
         $this->apm_date = htmlspecialchars(strip_tags($this->apm_date));
@@ -103,10 +108,53 @@ class Appointment{
 
         $this->sanitise();
 
-        if($stmt->execute([$this->apm_id]))
+        if ($stmt->execute([$this->apm_id]))
+            return true;
+
+        return false;
+    }
+
+    public function update()
+    {
+        $query = 'UPDATE Appointment SET ';
+
+        $thereIsComma = false;
+        if ($this->dentist_id != null) {
+            $query = $query . ' dentist_id = ' . $this->dentist_id . ' ';
+            $thereIsComma = true;
+        }
+        if ($this->apm_date != null) {
+            $query = $query . ($thereIsComma ? ' , ' : '') . ' date_time = ' . '\'' .$this->apm_date. '\'' . ' ';
+            $thereIsComma = true;
+
+        }
+
+        if ($this->apm_type != null) {
+            $query = $query . ($thereIsComma ? ' , ' : '' ). ' apm_type = ' . '\'' . $this->apm_type. '\'' . ' ';
+        }
+        $query = $query . ', recept_id =? WHERE apm_id = ? ';
+        echo $query;
+        $stmt = $this->conn->prepare($query);
+
+        if ($stmt->execute([$this->recept_id, $this->apm_id]))
             return true;
 
         return false;
 
+
+    }
+
+    public function confirm()
+    {
+        $query = 'UPDATE Appointment SET status_id = ?, recept_id=? WHERE apm_id = ? ';
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->sanitise();
+
+        if ($stmt->execute([$this->status_id, $this->recept_id, $this->apm_id]))
+            return true;
+
+        return false;
     }
 }

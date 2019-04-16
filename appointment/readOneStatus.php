@@ -28,10 +28,11 @@ if ($appointment->status_id != null)
             $apm = array(
                 "id" => (int)$apm_id,
                 "date" => $date_time,
+                "dentistId" => (int) $dentist_id,
                 "type" => $apm_type,
-                "dentist" => $fname ." ". $lname,
+                "dentist" => $fname . " " . $lname,
                 "status" => $status_name,
-                'specialty'=> $spec_name
+                'specialty' => $spec_name
             );
             array_push($appointmentList, $apm);
         }

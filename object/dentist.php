@@ -34,6 +34,17 @@ class Dentist{
         return $stmt;
     }
 
+    public function getOrigin()
+    {
+        $query = 'SELECT clinic_id FROM Dentist
+                    WHERE d_id = ?';
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->execute([$this->d_id]);
+        return $stmt;
+    }
+
 }
 
 ?>

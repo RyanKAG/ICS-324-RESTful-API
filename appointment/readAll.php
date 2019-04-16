@@ -28,6 +28,7 @@ if ($num > 0) {
         $apm = array(
             "id" => (int)$apm_id,
             "date" => $date_time,
+            "dentistId"=> $dentist_id,
             "type" => $apm_type,
             "dentist" => $fname ." ". $lname,
             "status" => $status_name,

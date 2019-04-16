@@ -27,7 +27,7 @@ if (
     !empty($data->UserName) &&
     !empty($data->status_ID) &&
     !empty($data->Reg_Date) &&
-    !empty($data->Type_ID)
+    !empty($data->type_ID)
 ) {
     $user->FName = $data->FName;
     $user->LName = $data->LName;
@@ -35,15 +35,15 @@ if (
     $user->UserName = $data->UserName;
     $user->Email = $data->Email;
     $user->Reg_Date = $data->Reg_Date;
-    $user->type_ID = $data->Type_ID;
+    $user->type_ID = $data->type_ID;
     $user->status_ID = $data->status_ID;
 
     if (!$user->isUser()) {
-        if($user->create()){
-        http_response_code(201);
+        if ($user->create()) {
+            http_response_code(201);
 
-        echo json_encode(array("message" => 'User has been registered'));
-        }else {
+            echo json_encode(array("message" => 'User has been registered'));
+        } else {
             http_response_code(502);
 
             echo json_encode(array('Error' => 'in sql execution'));
