@@ -59,14 +59,16 @@ class Appointment
 
     public function readOneStatus()
     {
-        $query = 'SELECT a.apm_id, a.dentist_id ,a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
+        $query = 'SELECT a.apm_id, a.dentist_id ,a.date_time, a.apm_type, p.username,d.fname, d.lname, sp.spec_name, s.status_name
                     FROM appointment a
                     LEFT JOIN dentist d ON
                       a.Dentist_ID = d.D_ID
                     LEFT JOIN specialty sp ON
                          sp.Specialty_ID = d.Specialty_ID
                     LEFT JOIN user_status s ON
-                    s.Status_ID = a.status_ID
+                        s.Status_ID = a.status_ID
+                    LEFT JOIN Users p ON
+                        p.U_id = a.patient_id
                     WHERE a.status_id = ? ORDER BY a.date_time ASC';
 
         $stmt = $this->conn->prepare($query);

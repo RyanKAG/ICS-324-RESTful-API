@@ -28,6 +28,7 @@ if ($appointment->status_id != null)
             $apm = array(
                 "id" => (int)$apm_id,
                 "date" => $date_time,
+                "patient"=>$username,
                 "dentistId" => (int) $dentist_id,
                 "type" => $apm_type,
                 "dentist" => $fname . " " . $lname,
