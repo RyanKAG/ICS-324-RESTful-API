@@ -47,7 +47,7 @@ class Clinic{
     }
 
     public function readAll(){
-        $query= 'SELECT c.c_id, c.services,  c.email, c.website, c.rating, c.name, s.status_name 
+        $query= 'SELECT c.c_id, c.services, c.location,  c.email, c.website, c.rating, c.name, s.status_name 
                 FROM Clinic c 
                 LEFT JOIN user_status s
                     ON s.status_id = c.status_id

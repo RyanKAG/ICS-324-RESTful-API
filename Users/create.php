@@ -31,7 +31,7 @@ if (
 ) {
     $user->FName = $data->FName;
     $user->LName = $data->LName;
-    $user->Hashed_pw = password_hash($data->Hashed_pw, PASSWORD_DEFAULT);;
+    $user->Hashed_pw = password_hash($data->Hashed_pw, PASSWORD_DEFAULT);
     $user->UserName = $data->UserName;
     $user->Email = $data->Email;
     $user->Reg_Date = $data->Reg_Date;

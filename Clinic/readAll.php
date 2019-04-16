@@ -39,6 +39,8 @@ if ($num > 0) {
                 $dts = array(
                     'id' => (int)$d_id,
                     'name' => $fname . ' ' . $lname,
+                    'rating'=> $rating,
+                    'specialty'=>$spec_name,
                     'email' => $email,
                     'office' => $clinic_office,
                     'status' => $status_name
@@ -52,7 +54,8 @@ if ($num > 0) {
                 'services' => $services,
                 'email' => $email,
                 'website' => $website,
-                'rating' => (real)$rating,
+                'location'=> $location,
+                'rating' => $rating,
                 'name' => $name,
                 'status' => $status_name,
                 'dentists'=>$dentists

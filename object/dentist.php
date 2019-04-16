@@ -23,9 +23,10 @@ class Dentist{
 
     public function getDentistsIn()
     {
-        $query = 'SELECT d.d_id, d.fname, d.lname, d.email, d.clinic_office, s.status_name
+        $query = 'SELECT d.d_id, d.fname, d.lname, d.email, d.rating, d.clinic_office, sp.spec_name, s.status_name
                     FROM dentist d
                     LEFT JOIN user_status s ON s.status_id = d.status_id 
+                    LEFT JOIN specialty sp ON sp.specialty_id = d.specialty_id
                     WHERE clinic_id = ?';
 
         $stmt = $this->conn->prepare($query);
