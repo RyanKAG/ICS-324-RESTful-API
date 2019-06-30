@@ -1,10 +1,10 @@
 <?php
 Class Database
 {
-    private $host = 'localhost:3307';
-    private $user = 'root';
-    private $pass = 'root';
-    private $dbName = 'PASM';
+    private $host = 'localhost:3306';
+    private $user = 'ryank_admin';
+    private $pass = 'Rn212121!@#';
+    private $dbName = 'ryankhal_users';
     public $conn;
     public function getConnection(){
        try{
