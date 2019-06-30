@@ -16,10 +16,6 @@ include_once '../object/dentist.php';
 $database = new Database();
 $db = $database->getConnection();
 
-
-
-
-
 $clinic = new Clinic($db);
 
 $stmt = $clinic->readAll();

@@ -19,7 +19,7 @@ class Appointment
 
     public function read()
     {
-        $query = 'SELECT a.apm_id, a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name
+        $query = 'SELECT a.apm_id, a.date_time, a.apm_type, d.fname, d.lname, sp.spec_name, s.status_name, a.dentist_id
                     FROM appointment a
                     LEFT JOIN dentist d ON
                       a.Dentist_ID = d.D_ID
